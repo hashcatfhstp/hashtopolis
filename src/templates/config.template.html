@@ -12,7 +12,9 @@
     <button onclick="window.location='config.php?view=5'" type="button" class="btn {{IF [[toggledarkmode]] > 0}}btn-dark{{ELSE}}btn-light{{ENDIF}}{{IF [[configSectionId]] == 5}} active{{ENDIF}}">Server</button>
     <button onclick="window.location='config.php?view=6'" type="button" class="btn {{IF [[toggledarkmode]] > 0}}btn-dark{{ELSE}}btn-light{{ENDIF}}{{IF [[configSectionId]] == 6}} active{{ENDIF}}">Multicast</button>
     <button onclick="window.location='config.php?view=7'" type="button" class="btn {{IF [[toggledarkmode]] > 0}}btn-dark{{ELSE}}btn-light{{ENDIF}}{{IF [[configSectionId]] == 7}} active{{ENDIF}}">Notifications</button>
-  </div>
+		<button onclick="window.location='config.php?view=8'" type="button" class="btn {{IF [[toggledarkmode]] > 0}}btn-dark{{ELSE}}btn-light{{ENDIF}}{{IF [[configSectionId]] == 8}} active{{ENDIF}}">Time Management</button>
+
+	</div>
 </div>
 
 <br>
@@ -57,7 +59,155 @@
                   {{ENDFOREACH}}
                 </select>
 						  {{ENDIF}}
-					  </td>
+							{{IF [[DConfig::getConfigType([[conf.getVal('item')]])]] == "timeselector"}}
+								<div style="text-align: center;">
+									<div class="btn btn-outline-danger" id="lockall" style="width: 160px;">Lock all</div>
+									<div class="btn btn-outline-success" id="unlockall" style="width: 160px;">Unlock all</div>
+								</div>
+								<br />
+								<table id="booking" class="unselectable table table-bordered">
+									<tr>
+										<th class="timeselector-header">&nbsp;</th>
+										<th class="timeselector-header">Mon</th>
+										<th class="timeselector-header">Tue</th>
+										<th class="timeselector-header">Wed</th>
+										<th class="timeselector-header">Thu</th>
+										<th class="timeselector-header">Fri</th>
+										<th class="timeselector-header">Sat</th>
+										<th class="timeselector-header">Sun</th>
+									</tr>
+								</table>
+
+								<input style="display: none;" id="timeselector-config-string" type="text" class='form-control' name="config_[[conf.getVal('item')]]" value="[[Util::escapeSpecial([[conf.getVal('value')]])]]" title="Config Value">
+
+							<script type="text/javascript">
+								$(document).ready(function () {
+									const step = 1; //step-size for timetable 0.5 = half hours, 0.25 = 15 minute steps
+									//currently, 1h steps are hardcoded, in the TimeManagement class - todo make dynamic
+
+									//converts number to str and pads zeros
+									Number.prototype.pad = function (size) {
+										let s = String(this);
+										while (s.length < (size || 2)) {
+											s = "0" + s;
+										}
+										return s;
+									}
+
+									let timetable = function () {
+										let cur;
+										let times = [];
+										for (cur = 0; cur <= 23.59; cur += step) {
+											times.push(cur)
+										}
+										let result = [];
+										for (let i = 0; i < times.length; i++) {
+											let h = Math.floor(times[i]);
+											let m = (times[i] - h) * 60;
+											result.push(h.pad(2) + ":" + m.pad(2));
+										}
+										return result;
+									}
+
+									//build visual timetable
+									let tt = timetable();
+									for (let i = 0; i < tt.length; i++) {
+										$('#booking > tbody:last-child').append('<tr time=\'' + tt[i] + '\'><td>' + tt[i] + '</td>' +
+											'<td class="book-toggle" day="mon" state="red"></td>' +
+											'<td class="book-toggle" day="tue" state="red"></td>' +
+											'<td class="book-toggle" day="wed" state="red"></td>' +
+											'<td class="book-toggle" day="thu" state="red"></td>' +
+											'<td class="book-toggle" day="fri" state="red"></td>' +
+											'<td class="book-toggle" day="sat" state="red"></td>' +
+											'<td class="book-toggle" day="sun" state="red"></td></tr>');
+									}
+
+									//function to generate config string
+									const genConfigString = function(){
+										let output = [];
+										$('.book-toggle').each(function () {
+											output.push(
+												`\{"day": "${$(this).attr("day")}", "time": "${$(this).parent().attr("time")}", "state": "${$(this).attr("state")}"\}`
+											);
+										});
+
+										$("#timeselector-config-string").attr("value", `[${output}]`);
+									}
+
+									//functionality to lock/unlock timeslots
+									let paint_mode = false;
+									$(document).mousedown(function () {
+										paint_mode = true;
+									});
+									$(document).mouseup(function () {
+										paint_mode = false;
+									});
+									$('.book-toggle').mouseenter(function () {
+										if (paint_mode) {
+											if ($(this).css("background-color") === "rgb(255, 0, 0)") {
+												$(this).css("background-color", "lime");
+												$(this).attr("state", "green");
+												genConfigString();
+
+											} else {
+												$(this).css("background-color", "red");
+												$(this).attr("state", "red");
+												genConfigString();
+											}
+										}
+									});
+									$('.book-toggle').mousedown(function () {
+										if ($(this).css("background-color") === "rgb(255, 0, 0)") {
+											$(this).css("background-color", "lime");
+											$(this).attr("state", "green");
+											genConfigString();
+										} else {
+											$(this).css("background-color", "red");
+											$(this).attr("state", "red");
+											genConfigString();
+										}
+									});
+
+									//unlock all button
+									$('#unlockall').click(function () {
+										$('.book-toggle').css("background-color", "lime").attr("state", "green");
+										genConfigString();
+									});
+
+									//lock all button
+									$('#lockall').click(function () {
+										$('.book-toggle').css("background-color", "red").attr("state", "red");
+										genConfigString();
+									});
+
+									//load saved data into timetable editor
+									const loadConfig = function () {
+										const stored_config = $('#timeselector-config-string').attr('value');
+										if(stored_config){  //avoid iterating over undefined config - if unavailable for some reason
+											const config = JSON.parse(stored_config);
+											for(let entry = 0; entry < config.length; entry++){
+												//iterate over config entries and populate config table
+												$('.book-toggle').each(function () {
+													if(config[entry]["time"] === $(this).parent().attr('time')){
+														if(config[entry]["day"] === $(this).attr('day')){
+															$(this).attr("state", config[entry]["state"])
+															if(config[entry]["state"] === "green") {
+																$(this).css('background-color', 'lime');
+															}
+														}
+													}
+												});
+											}
+										}
+									}
+
+									loadConfig();
+
+								});
+
+							</script>
+							{{ENDIF}}
+						</td>
 				  </tr>
 			  {{ENDFOREACH}}
 			  <tr>
