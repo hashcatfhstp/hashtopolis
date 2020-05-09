@@ -22,6 +22,8 @@ abstract class APIBasic {
   
   protected function updateAgent($action) {
     Factory::getAgentFactory()->mset($this->agent, [Agent::LAST_IP => Util::getIP(), Agent::LAST_ACT => $action, Agent::LAST_TIME => time()]);
+    //every update: check if agent is still allowed to run by TimeManagement policy
+    TimeManagement::executeTMpolicy($this->agent);
   }
   
   public function sendErrorResponse($action, $msg) {
