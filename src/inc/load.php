@@ -111,5 +111,7 @@ UI::add('accessControl', AccessControl::getInstance());
 // CSRF setup
 CSRF::init();
 
+//Time Management
+UI::add('timemanagement', TimeManagement::getInstance());
 
 
