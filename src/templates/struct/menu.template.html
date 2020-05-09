@@ -115,6 +115,11 @@
 			{{ENDIF}}
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
+			{{IF [[login.isLoggedin()]]}}
+				{{IF [[timemanagement.getTMstate()]] == "red" }}
+					<li class="nav-item" id="timemanagement-warn" data-toggle="tooltip" data-placement="bottom" title="Hashtopolis is currently inactive due to the specified time management settings"><a class="nav-link" href="#"><i class="fas fa-exclamation-triangle text-danger" aria-hidden="true"></i></a></li>
+				{{ENDIF}}
+			{{ENDIF}}
 			<li class="nav-item"><a class="nav-link" href="#" onclick="darkMode();"><i class="fas {{IF [[toggledarkmode]] > 0}}fa-sun{{ELSE}}fa-moon{{ENDIF}}" aria-hidden="true"></i></a></li>
 			{{IF [[login.isLoggedin()]]}}
 				<li class="nav-item"><a class="nav-link" href="logout.php"><i class="fas fa-sign-out-alt" aria-hidden="true"></i></a></li>
@@ -122,4 +127,3 @@
 		</ul>
 	</div>
 </nav>
-
