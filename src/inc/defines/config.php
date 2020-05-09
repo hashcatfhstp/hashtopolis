@@ -6,6 +6,7 @@ class DConfigType {
   const TICKBOX      = "checkbox";
   const EMAIL        = "email";
   const SELECT       = "select";
+  const TIMESELECTOR = "timeselector";
 }
 
 class DConfigAction {
@@ -107,6 +108,9 @@ class DConfig {
   const NOTIFICATIONS_PROXY_SERVER = "notificationsProxyServer";
   const NOTIFICATIONS_PROXY_PORT   = "notificationsProxyPort";
   const NOTIFICATIONS_PROXY_TYPE   = "notificationsProxyType";
+  
+  //Section: User Access Times
+  const USER_ACCESS_TIMES = "userAccessTimes";
   
   static function getConstants() {
     try {
@@ -272,6 +276,8 @@ class DConfig {
         return DConfigType::TICKBOX;
       case DConfig::HC_ERROR_IGNORE:
         return DConfigType::STRING_INPUT;
+      case DConfig::USER_ACCESS_TIMES:
+        return DConfigType::TIMESELECTOR;
     }
     return DConfigType::STRING_INPUT;
   }
@@ -406,6 +412,8 @@ class DConfig {
         return "Also send 'isComplete' for each task on the User API when listing all tasks (might affect performance)";
       case DConfig::HC_ERROR_IGNORE:
         return "Ignore error messages from crackers which contain given strings (multiple values separated by comma)";
+      case DConfig::USER_ACCESS_TIMES:
+        return "Configure cracking times.<br><span style='color: lime'>Green: </span>Agents active<br><span style='color: red'>Red: </span>Agents inactive";
     }
     return $config;
   }
