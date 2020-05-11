@@ -347,6 +347,22 @@ else if (isset($_GET['new'])) {
   }
   UI::add('lists', $lists);
   
+  $presets = array();
+  $res = Factory::getHashcatPresetsFactory()->filter([]);
+  $set = new DataSet();
+  $set->addValue('presetID', '0');
+  $set->addValue('presetName', 'None');
+  $set->addValue('presetCommand', $copy->getAttackCmd());
+  $presets[] = $set;
+  foreach ($res as $list) {
+    $set = new DataSet();
+    $set->addValue('presetID', $list->getId());
+    $set->addValue('presetName', $list->getPresetName());
+    $set->addValue('presetCommand', $list->getPresetCommand());
+    $presets[] = $set;
+  }
+  UI::add('presets', $presets);
+  
   $oF = new OrderFilter(Preprocessor::NAME, "ASC");
   $preprocessors = Factory::getPreprocessorFactory()->filter([Factory::ORDER => $oF]);
   UI::add('preprocessors', $preprocessors);

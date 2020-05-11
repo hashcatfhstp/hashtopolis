@@ -33,6 +33,22 @@
             </td>
           </tr>
           <tr>
+            <td>Presets:</td>
+            <td>
+              <select class='form-control full-width' name="presetsList" id="presetsList" onchange="selectPreset()">
+                {{FOREACH preset;[[presets]]}}
+                <option value="[[preset.getVal('presetCommand')]]"> [[preset.getVal('presetName')]]</option>
+                {{ENDFOREACH}}
+              </select>
+              <script>
+                  function selectPreset() {
+                      var preset = document.getElementById("presetsList").value;
+                      document.getElementById("cmdLine").innerHTML = preset;
+                  }
+              </script>
+            </td>
+          </tr>
+          <tr>
             <td>Command line:</td>
             <td>
               <textarea name="cmdline" class='form-control my-1 full-width' id="cmdLine" title="Cmd Line" {{IF ![[accessControl.hasPermission([[$DAccessControl::CREATE_TASK_ACCESS]])]]}} readonly{{ENDIF}}>[[copy.getAttackCmd()]]</textarea>
