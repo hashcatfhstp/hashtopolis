@@ -38,6 +38,21 @@
               <textarea name="cmdline" class='form-control my-1 full-width' id="cmdLine" title="Cmd Line" {{IF ![[accessControl.hasPermission([[$DAccessControl::CREATE_TASK_ACCESS]])]]}} readonly{{ENDIF}}>[[copy.getAttackCmd()]]</textarea>
               Use <b>[[config.getVal('hashlistAlias')]]</b> for hash list and assume all files in current directory.<br>
               If you have Linux agents, please mind the filename case sensitivity!
+              <script type="text/javascript">
+                  function ShowHide(chkboxSavePreset) {
+                      var presetNameField = document.getElementById("presetNameField");
+                      presetNameField.style.display = chkboxSavePreset.checked ? "block" : "none";
+                  }
+              </script>
+              <label for="chkboxSavePreset" style="width:auto;float:left;">
+                <input type="checkbox" name="savePreset" class="form-control" id="chkSavePreset" onclick="ShowHide(this)" />
+                &nbsp;Save command as preset?
+              </label>
+              <div id="presetNameField" style="display: none">
+                <br>
+                Preset Name:
+                <input type="text" name="presetName" class="form-control" id="presetName" />
+              </div>
             </td>
           </tr>
           <tr>
