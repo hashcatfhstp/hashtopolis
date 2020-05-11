@@ -126,6 +126,11 @@ $CONF['HashBinary'] = [
   'isCracked',
   'crackPos'
 ];
+$CONF['HashcatPresets'] = [
+  'presetID',
+  'presetName',
+  'presetCommand'
+];
 $CONF['Hashlist'] = [
   'hashlistId',
   'hashlistName',

@@ -260,6 +260,12 @@ CREATE TABLE `HashBinary` (
   `crackPos`     BIGINT        NOT NULL
 ) ENGINE = InnoDB;
 
+CREATE TABLE `HashcatPresets` (
+  `presetID`      INT(11)      NOT NULL,
+  `presetName`    VARCHAR(100) NOT NULL,
+  `presetCommand` VARCHAR(100) NOT NULL
+) ENGINE = InnoDB;
+
 CREATE TABLE `Hashlist` (
   `hashlistId`    INT(11)      NOT NULL,
   `hashlistName`  VARCHAR(100) NOT NULL,
@@ -919,6 +925,9 @@ ALTER TABLE `HashBinary`
   ADD KEY `hashlistId` (`hashlistId`),
   ADD KEY `chunkId` (`chunkId`);
 
+ALTER TABLE `HashcatPresets`
+  ADD PRIMARY KEY (`presetID`);
+
 ALTER TABLE `Hashlist`
   ADD PRIMARY KEY (`hashlistId`),
   ADD KEY `hashTypeId` (`hashTypeId`);
@@ -1072,6 +1081,9 @@ ALTER TABLE `Hash`
 
 ALTER TABLE `HashBinary`
   MODIFY `hashBinaryId` INT(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `HashcatPresets`
+  MODIFY `presetID` INT(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `Hashlist`
   MODIFY `hashlistId` INT(11) NOT NULL AUTO_INCREMENT;
