@@ -1,0 +1,64 @@
+{%TEMPLATE->struct/head%}
+{%TEMPLATE->struct/menu%}
+<h2>Presets</h2>
+{%TEMPLATE->struct/messages%}
+<form action="presets.php" method="POST">
+	<input type='hidden' name='action' value='[[$DPresetAction::ADD_PRESET]]'>
+	<input type="hidden" name="csrf" value="[[csrf]]">
+	<div class="card">
+    <div class="table-responsive">
+      <table class="table table-bordered">
+			  <tr>
+				  <th colspan='2' style='text-align: center;'>
+					  <b>Add new Preset</b>
+				  </th>
+			  </tr>
+			  <tr>
+				  <th>Preset name</th>
+				  <th>Preset command</th>
+			  </tr>
+			  <tr>
+				  <td>
+					  <input type='text' name='presetName' class='form-control' title="Name">
+				  </td>
+					<td>
+						<input type='text' name='presetCommand' class='form-control' title="Command">
+					</td>
+			  </tr>
+			  <tr>
+				  <td colspan="2">
+					  <input type="submit" class='btn btn-success' value="Add">
+				  </td>
+			  </tr>
+		  </table>
+    </div>
+	</div>
+</form>
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-bordered">
+		  <tr>
+			  <th>Preset ID</th>
+			  <th>Name</th>
+        <th>Command</th>
+			  <th>&nbsp;</th>
+		  </tr>
+		  {{FOREACH type;[[presets]]}}
+			  <tr>
+				  <td>[[type.getId()]]</td>
+				  <td>[[type.getPresetName()]]</td>
+					<td>[[type.getPresetCommand()]]</td>
+				  <td>
+					  <form class="float-right" action="presets.php" method="POST" onSubmit="if (!confirm('Really delete preset [[type.getId()]]?')) return false;">
+						  <input type="hidden" name="action" value="[[$DPresetAction::DELETE_PRESET]]">
+						  <input type="hidden" name="presetID" value="[[type.getId()]]">
+						  <input type="hidden" name="csrf" value="[[csrf]]">
+              <button type="submit" class='btn btn-danger' data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash" aria-hidden="true"></i></button>
+					  </form>
+				  </td>
+			  </tr>
+		  {{ENDFOREACH}}
+	  </table>
+  </div>
+</div>
+{%TEMPLATE->struct/foot%}
