@@ -6,6 +6,7 @@ use DBA\QueryFilter;
 use DBA\Task;
 use DBA\TaskWrapper;
 use DBA\Factory;
+use DBA\HashcatPresets;
 
 class TaskHandler implements Handler {
   private $task;
@@ -138,6 +139,7 @@ class TaskHandler implements Handler {
     $enforcePipe = intval(@$_POST['enforcePipe']);
     $usePreprocessor = intval(@$_POST['usePreprocessor']);
     $preprocessorCommand = @$_POST['preprocessorCommand'];
+    $presetName = htmlentities($_POST["presetName"], ENT_QUOTES, "UTF-8");
     
     $crackerBinaryType = Factory::getCrackerBinaryTypeFactory()->get($crackerBinaryTypeId);
     $crackerBinary = Factory::getCrackerBinaryFactory()->get($crackerBinaryVersionId);
@@ -204,7 +206,15 @@ class TaskHandler implements Handler {
       UI::addMessage(UI::ERROR, "No access to this access group!");
       return;
     }
-    
+  
+    if (isset($_POST["savePreset"])) {
+      if ($presetName == ''){
+        UI::addMessage(UI::ERROR, "Preset name can not be empty!");
+        return;
+      }
+      $preset = new HashcatPresets(null, $presetName, $cmdline);
+      Factory::getHashcatPresetsFactory()->save($preset);
+    }
     if ($skipKeyspace < 0) {
       $skipKeyspace = 0;
     }

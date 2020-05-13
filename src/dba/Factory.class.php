@@ -47,6 +47,7 @@ class Factory {
   private static $filePretaskFactory = null;
   private static $supertaskPretaskFactory = null;
   private static $hashlistHashlistFactory = null;
+  private static $hashcatPresetsFactory = null;
   
   public static function getAccessGroupFactory() {
     if (self::$accessGroupFactory == null) {
@@ -485,6 +486,16 @@ class Factory {
       return $f;
     } else {
       return self::$hashlistHashlistFactory;
+    }
+  }
+  
+  public static function getHashcatPresetsFactory() {
+    if (self::$hashcatPresetsFactory == null) {
+      $f = new HashcatPresetsFactory();
+      self::$hashcatPresetsFactory = $f;
+      return $f;
+    } else {
+      return self::$hashcatPresetsFactory;
     }
   }
   
