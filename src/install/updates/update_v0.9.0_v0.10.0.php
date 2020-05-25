@@ -16,14 +16,14 @@ require_once(dirname(__FILE__) . "/../../inc/defines/config.php");
 require_once(dirname(__FILE__) . "/../../inc/defines/log.php");
 
 if(!isset($PRESENT["v0.9.0_conf1"])){
-  $config = new Config(null, 1, DConfig::HASHCAT_BRAIN_ENABLE, '0');
-  Factory::getConfigFactory()->save($config);
-  $config = new Config(null, 1, DConfig::HASHCAT_BRAIN_HOST, '');
-  Factory::getConfigFactory()->save($config);
-  $config = new Config(null, 1, DConfig::HASHCAT_BRAIN_PORT, '0');
-  Factory::getConfigFactory()->save($config);
-  $config = new Config(null, 1, DConfig::HASHCAT_BRAIN_PASS, '');
-  Factory::getConfigFactory()->save($config);
+  #$config = new Config(null, 1, DConfig::HASHCAT_BRAIN_ENABLE, '0');
+  #Factory::getConfigFactory()->save($config);
+  #$config = new Config(null, 1, DConfig::HASHCAT_BRAIN_HOST, '');
+  #Factory::getConfigFactory()->save($config);
+  #$config = new Config(null, 1, DConfig::HASHCAT_BRAIN_PORT, '0');
+  #Factory::getConfigFactory()->save($config);
+  #$config = new Config(null, 1, DConfig::HASHCAT_BRAIN_PASS, '');
+  #Factory::getConfigFactory()->save($config);
   $config = new Config(null, 1, DConfig::HASHLIST_IMPORT_CHECK, '0');
   Factory::getConfigFactory()->save($config);
   $config = new Config(null, 5, DConfig::ALLOW_DEREGISTER, '1');
