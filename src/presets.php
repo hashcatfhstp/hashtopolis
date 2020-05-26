@@ -8,8 +8,8 @@ if (!Login::getInstance()->isLoggedin()) {
   header("Location: index.php?err=4" . time() . "&fw=" . urlencode($_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING']));
   die();
 }
-# TODO: Create new VIEW PERMISSION for presets
-AccessControl::getInstance()->checkPermission(DViewControl::HASHTYPES_VIEW_PERM);
+
+AccessControl::getInstance()->checkPermission(DViewControl::PRESETS_VIEW_PERM);
 
 Template::loadInstance("presets");
 Menu::get()->setActive("config_presets");
