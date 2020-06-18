@@ -1,4 +1,4 @@
-**This is WIP fork of: https://github.com/s3inlc/hashtopolis**
+This is a [Hashtopolis](https://github.com/s3inlc/hashtopolis) Fork, which was extended by a time management function to administrate agents more effectively. GDPR requirements have also been taken into account to gain better control over generated files. For GDPR-compliant operation, the use of the [Agent-Fork](https://github.com/hashcatfhstp/hashtopolis-agent-python_fork) is strictly recommended!
 
 ## Setup and Usage
 
